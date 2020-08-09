@@ -27,6 +27,7 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="fastapi, logging",
-    packages=["healthcheck"],
+    packages=["route_logger"],
     python_requires=">=3.7, <4",
     install_requires=["fastapi"],
+)
