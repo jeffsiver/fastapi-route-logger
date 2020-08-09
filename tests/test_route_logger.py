@@ -31,7 +31,7 @@ class TestRouteLogger:
         request = MagicMock(spec=Request, url=MagicMock(path="/skip/me"))
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLogger(app, logger=logger, skip_paths=["/skip"])
+        route_logger = RouteLogger(app, logger=logger, skip_routes=["/skip"])
         response = MagicMock(spec=Response)
         call_next = AsyncMock(return_value=response)
         result = asyncio.run(route_logger.dispatch(request, call_next))
