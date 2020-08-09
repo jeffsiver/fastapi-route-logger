@@ -28,10 +28,10 @@ class TestRouteLogger:
         )
 
     def test_when_skipping_route(self):
-        request = MagicMock(spec=Request, url=MagicMock(path="/metrics/stuff"))
+        request = MagicMock(spec=Request, url=MagicMock(path="/skip/me"))
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLogger(app, logger=logger)
+        route_logger = RouteLogger(app, logger=logger, skip_paths=["/skip"])
         response = MagicMock(spec=Response)
         call_next = AsyncMock(return_value=response)
         result = asyncio.run(route_logger.dispatch(request, call_next))

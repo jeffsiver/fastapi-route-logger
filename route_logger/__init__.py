@@ -10,9 +10,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 
 class RouteLogger(BaseHTTPMiddleware):
-    def __init__(self, app: FastAPI, *, logger: typing.Optional[logging.Logger] = None):
+    def __init__(self, app: FastAPI, *, logger: typing.Optional[logging.Logger] = None, skip_paths: typing.List[str] = None):
         self._logger = logger if logger else logging.getLogger(__name__)
-        self._skip_paths_that_start_with = ["/metrics"]
+        self._skip_paths = skip_paths if skip_paths else []
         super().__init__(app)
         app.add_exception_handler(HTTPException, self.exception_handler)
 
@@ -34,7 +34,7 @@ class RouteLogger(BaseHTTPMiddleware):
         return any(
             [
                 path
-                for path in self._skip_paths_that_start_with
+                for path in self._skip_paths
                 if request.url.path.startswith(path)
             ]
         )
