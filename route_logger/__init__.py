@@ -9,7 +9,7 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
-class RouteLogger(BaseHTTPMiddleware):
+class RouteLoggerMiddleware(BaseHTTPMiddleware):
     def __init__(self, app: FastAPI, *, logger: typing.Optional[logging.Logger] = None, skip_routes: typing.List[str] = None):
         self._logger = logger if logger else logging.getLogger(__name__)
         self._skip_routes = skip_routes if skip_routes else []

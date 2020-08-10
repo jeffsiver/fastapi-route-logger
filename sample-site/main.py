@@ -3,12 +3,12 @@ from time import sleep
 
 from fastapi import FastAPI, HTTPException
 
-from route_logger import RouteLogger
+from route_logger import RouteLoggerMiddleware
 
 app = FastAPI(title="Sample API for testing logging", version="1.0")
 
 logging.config.fileConfig("./logging.conf")
-app.add_middleware(RouteLogger)
+app.add_middleware(RouteLoggerMiddleware)
 
 
 @app.get("/success")

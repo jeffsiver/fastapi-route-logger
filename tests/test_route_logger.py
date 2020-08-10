@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 from fastapi import Request, Response, FastAPI, HTTPException
 
-from route_logger import RouteLogger
+from route_logger import RouteLoggerMiddleware
 
 
 class TestRouteLogger:
@@ -16,7 +16,7 @@ class TestRouteLogger:
         )
         request = MagicMock(spec=Request, url=MagicMock(path="/ohno"), method="POST")
         logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLogger(MagicMock(spec=FastAPI), logger=logger)
+        route_logger = RouteLoggerMiddleware(MagicMock(spec=FastAPI), logger=logger)
         exception = HTTPException(status_code=12, detail="something happened")
 
         result = asyncio.run(route_logger.exception_handler(request, exception))
@@ -31,7 +31,7 @@ class TestRouteLogger:
         request = MagicMock(spec=Request, url=MagicMock(path="/skip/me"))
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLogger(app, logger=logger, skip_routes=["/skip"])
+        route_logger = RouteLoggerMiddleware(app, logger=logger, skip_routes=["/skip"])
         response = MagicMock(spec=Response)
         call_next = AsyncMock(return_value=response)
         result = asyncio.run(route_logger.dispatch(request, call_next))
@@ -45,7 +45,7 @@ class TestRouteLogger:
         )
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLogger(app, logger=logger)
+        route_logger = RouteLoggerMiddleware(app, logger=logger)
         response = MagicMock(spec=Response, status_code=200)
         call_next = AsyncMock(return_value=response)
 
@@ -64,7 +64,7 @@ class TestRouteLogger:
         )
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLogger(app, logger=logger)
+        route_logger = RouteLoggerMiddleware(app, logger=logger)
         call_next = AsyncMock(side_effect=Exception("nothing good will come of this"))
 
         with pytest.raises(Exception):
