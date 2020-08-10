@@ -10,7 +10,13 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 
 class RouteLoggerMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app: FastAPI, *, logger: typing.Optional[logging.Logger] = None, skip_routes: typing.List[str] = None):
+    def __init__(
+        self,
+        app: FastAPI,
+        *,
+        logger: typing.Optional[logging.Logger] = None,
+        skip_routes: typing.List[str] = None,
+    ):
         self._logger = logger if logger else logging.getLogger(__name__)
         self._skip_routes = skip_routes if skip_routes else []
         super().__init__(app)
@@ -32,11 +38,7 @@ class RouteLoggerMiddleware(BaseHTTPMiddleware):
 
     def _should_route_be_skipped(self, request: Request) -> bool:
         return any(
-            [
-                path
-                for path in self._skip_routes
-                if request.url.path.startswith(path)
-            ]
+            [path for path in self._skip_routes if request.url.path.startswith(path)]
         )
 
     async def _execute_request_with_logging(

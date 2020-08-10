@@ -7,8 +7,8 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "readme.md").read_text(encoding="utf-8")
 
 setup(
-    name="fastapi-route-logger",
-    version="0.0.3",
+    name="fastapi-route-logger-middleware",
+    version="0.0.4",
     description="Simple middleware for FastAPI to generate log entries on all requests",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -27,7 +27,7 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="fastapi, logging, middleware",
-    packages=["route_logger"],
+    packages=["fastapi_route_logger_middleware"],
     python_requires=">=3.7, <4",
     install_requires=["fastapi"],
 )

@@ -5,14 +5,15 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 from fastapi import Request, Response, FastAPI, HTTPException
 
-from route_logger import RouteLoggerMiddleware
+from fastapi_route_logger_middleware import RouteLoggerMiddleware
 
 
 class TestRouteLogger:
     def test_exception_handler(self, mocker):
         response = MagicMock(spec=Response)
         http_exception_handler = mocker.patch(
-            "route_logger.http_exception_handler", return_value=response
+            "fastapi_route_logger_middleware.http_exception_handler",
+            return_value=response,
         )
         request = MagicMock(spec=Request, url=MagicMock(path="/ohno"), method="POST")
         logger = MagicMock(spec=logging.Logger)
@@ -39,7 +40,9 @@ class TestRouteLogger:
         call_next.assert_called_once_with(request)
 
     def test_when_logging_request(self, mocker):
-        mocker.patch("route_logger.time.perf_counter", side_effect=[1.2, 1.4])
+        mocker.patch(
+            "fastapi_route_logger_middleware.time.perf_counter", side_effect=[1.2, 1.4]
+        )
         request = MagicMock(
             spec=Request, url=MagicMock(path="/somewhere",), method="GET"
         )
@@ -58,7 +61,9 @@ class TestRouteLogger:
         )
 
     def test_when_logging_request_with_standard_exception(self, mocker):
-        mocker.patch("route_logger.time.perf_counter", side_effect=[1.2, 1.4])
+        mocker.patch(
+            "fastapi_route_logger_middleware.time.perf_counter", side_effect=[1.2, 1.4]
+        )
         request = MagicMock(
             spec=Request, url=MagicMock(path="/somewhere",), method="GET"
         )
