@@ -8,14 +8,14 @@ long_description = (here / "readme.md").read_text(encoding="utf-8")
 
 setup(
     name="fastapi-route-logger-middleware",
-    version="0.0.5",
+    version="0.0.8",
     description="Simple middleware for FastAPI to generate log entries on all requests",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/jeffsiver/fastapi-route-logger",
-    author="Jeff Siver",  # Optional
+    author="Jeff Siver",
     author_email="jeffsiver@gmail.com",
-    classifiers=[  # Optional
+    classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
@@ -28,5 +28,6 @@ setup(
     ],
     keywords="fastapi, logging, middleware",
     packages=["fastapi_route_logger_middleware"],
-    python_requires=">=3.7, <4",
+    python_requires=">=3.7",
+    install_requires=["fastapi"],
 )

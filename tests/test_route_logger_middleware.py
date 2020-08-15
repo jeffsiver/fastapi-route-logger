@@ -3,31 +3,12 @@ import logging
 from unittest.mock import MagicMock, AsyncMock
 
 import pytest
-from fastapi import Request, Response, FastAPI, HTTPException
+from fastapi import Request, Response, FastAPI
 
 from fastapi_route_logger_middleware import RouteLoggerMiddleware
 
 
 class TestRouteLogger:
-    def test_exception_handler(self, mocker):
-        response = MagicMock(spec=Response)
-        http_exception_handler = mocker.patch(
-            "fastapi_route_logger_middleware.http_exception_handler",
-            return_value=response,
-        )
-        request = MagicMock(spec=Request, url=MagicMock(path="/ohno"), method="POST")
-        logger = MagicMock(spec=logging.Logger)
-        route_logger = RouteLoggerMiddleware(MagicMock(spec=FastAPI), logger=logger)
-        exception = HTTPException(status_code=12, detail="something happened")
-
-        result = asyncio.run(route_logger.exception_handler(request, exception))
-
-        assert result == response
-        http_exception_handler.assert_called_once_with(request, exception)
-        logger.exception.assert_called_once_with(
-            "Exception occurred processing request POST /ohno"
-        )
-
     def test_when_skipping_route(self):
         request = MagicMock(spec=Request, url=MagicMock(path="/skip/me"))
         app = MagicMock(spec=FastAPI)

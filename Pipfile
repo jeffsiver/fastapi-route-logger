@@ -9,6 +9,7 @@ pytest-mock = "*"
 black = "==19.10b0"
 hypercorn = "*"
 bump2version = "*"
+twine = "*"
 
 [packages]
 fastapi = "*"

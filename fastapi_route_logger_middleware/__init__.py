@@ -4,8 +4,6 @@ import typing
 from typing import Callable
 
 from fastapi import FastAPI, Request, Response
-from fastapi.exception_handlers import http_exception_handler
-from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
@@ -20,15 +18,6 @@ class RouteLoggerMiddleware(BaseHTTPMiddleware):
         self._logger = logger if logger else logging.getLogger(__name__)
         self._skip_routes = skip_routes if skip_routes else []
         super().__init__(app)
-        app.add_exception_handler(HTTPException, self.exception_handler)
-
-    async def exception_handler(
-        self, request: Request, exception: HTTPException
-    ) -> Response:
-        self._logger.exception(
-            f"Exception occurred processing request {request.method} {request.url.path}"
-        )
-        return await http_exception_handler(request, exception)
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         if self._should_route_be_skipped(request):
