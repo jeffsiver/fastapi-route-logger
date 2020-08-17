@@ -43,7 +43,7 @@ jobs:
           pipenv run python setup.py bdist_wheel
 
       - name: Publish distribution 📦 to Test PyPI
-        if: !startsWith(github.ref, 'refs/tags')
+        if: startsWith(github.ref, 'refs/tags') != true
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
