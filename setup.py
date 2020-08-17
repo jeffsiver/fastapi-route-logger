@@ -8,7 +8,7 @@ long_description = (here / "readme.md").read_text(encoding="utf-8")
 
 setup(
     name="fastapi-route-logger-middleware",
-    version="0.1.1",
+    version="0.1.2",
     description="Simple middleware for FastAPI to generate log entries on all requests",
     long_description=long_description,
     long_description_content_type="text/markdown",
