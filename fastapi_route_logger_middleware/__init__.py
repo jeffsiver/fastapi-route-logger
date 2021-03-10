@@ -47,7 +47,7 @@ class RouteLoggerMiddleware(BaseHTTPMiddleware):
     def _generate_success_log(
         self, request: Request, response: Response, execution_time: float
     ):
-        overall_status = "successful" if response.status_code < 500 else "failed"
+        overall_status = "successful" if response.status_code < 400 else "failed"
         return f"Request {overall_status}, {request.method} {request.url.path}, status code={response.status_code}, took={execution_time:0.4f}s"
 
     async def _execute_request(self, call_next: Callable, request: Request) -> Response:
