@@ -1,4 +1,5 @@
 import logging.config
+import os
 from time import sleep
 
 from fastapi import FastAPI, HTTPException
@@ -7,7 +8,7 @@ from fastapi_route_logger_middleware import RouteLoggerMiddleware
 
 app = FastAPI(title="Sample API for testing logging", version="1.0")
 
-logging.config.fileConfig("./logging.conf")
+logging.config.fileConfig(f"{os.path.dirname(__file__)}/logging.conf")
 app.add_middleware(RouteLoggerMiddleware)
 
 
@@ -19,4 +20,4 @@ def success_endpoint():
 
 @app.get("/failed")
 def failed_endpoint():
-    raise HTTPException(status_code=500)
+    i = 1 / 0
