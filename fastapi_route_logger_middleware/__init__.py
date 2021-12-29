@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 import typing
 from typing import Callable
@@ -14,9 +15,15 @@ class RouteLoggerMiddleware(BaseHTTPMiddleware):
         *,
         logger: typing.Optional[logging.Logger] = None,
         skip_routes: typing.List[str] = None,
+        skip_regexes: typing.List[str] = None,
     ):
         self._logger = logger if logger else logging.getLogger(__name__)
         self._skip_routes = skip_routes if skip_routes else []
+        self._skip_regexes = (
+            list(map(lambda regex: re.compile(regex), skip_regexes))
+            if skip_regexes
+            else []
+        )
         super().__init__(app)
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
@@ -27,7 +34,8 @@ class RouteLoggerMiddleware(BaseHTTPMiddleware):
 
     def _should_route_be_skipped(self, request: Request) -> bool:
         return any(
-            [path for path in self._skip_routes if request.url.path.startswith(path)]
+            [True for path in self._skip_routes if request.url.path.startswith(path)]
+            + [True for regex in self._skip_regexes if regex.match(request.url.path)]
         )
 
     async def _execute_request_with_logging(

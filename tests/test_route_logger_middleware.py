@@ -1,10 +1,9 @@
 import asyncio
 import logging
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from fastapi import Request, Response, FastAPI
-
+from fastapi import FastAPI, Request, Response
 from fastapi_route_logger_middleware import RouteLoggerMiddleware
 
 
@@ -20,12 +19,41 @@ class TestRouteLogger:
         assert result == response
         call_next.assert_called_once_with(request)
 
+    def test_when_skipping_regexes(self):
+        request = MagicMock(spec=Request, url=MagicMock(path="/api/0.1.5/status"))
+        app = MagicMock(spec=FastAPI)
+        logger = MagicMock(spec=logging.Logger)
+        route_logger = RouteLoggerMiddleware(
+            app, logger=logger, skip_regexes=[r"/api/.*/status"]
+        )
+        response = MagicMock(spec=Response)
+        call_next = AsyncMock(return_value=response)
+        result = asyncio.run(route_logger.dispatch(request, call_next))
+        assert result == response
+        call_next.assert_called_once_with(request)
+
+    def test_when_skipping_routes_and_regexes(self):
+        request = MagicMock(spec=Request, url=MagicMock(path="/api/0.1.5/status"))
+        app = MagicMock(spec=FastAPI)
+        logger = MagicMock(spec=logging.Logger)
+        route_logger = RouteLoggerMiddleware(
+            app,
+            logger=logger,
+            skip_regexes=[r"/api/.*/status"],
+            skip_routes=[r"/status"],
+        )
+        response = MagicMock(spec=Response)
+        call_next = AsyncMock(return_value=response)
+        result = asyncio.run(route_logger.dispatch(request, call_next))
+        assert result == response
+        call_next.assert_called_once_with(request)
+
     def test_when_logging_request(self, mocker):
         mocker.patch(
             "fastapi_route_logger_middleware.time.perf_counter", side_effect=[1.2, 1.4]
         )
         request = MagicMock(
-            spec=Request, url=MagicMock(path="/somewhere",), method="GET"
+            spec=Request, url=MagicMock(path="/somewhere",), method="GET",
         )
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
@@ -46,7 +74,7 @@ class TestRouteLogger:
             "fastapi_route_logger_middleware.time.perf_counter", side_effect=[1.2, 1.4]
         )
         request = MagicMock(
-            spec=Request, url=MagicMock(path="/somewhere",), method="GET"
+            spec=Request, url=MagicMock(path="/somewhere",), method="GET",
         )
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
