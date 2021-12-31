@@ -43,7 +43,7 @@ jobs:
   build:
     needs: check
     runs-on: ubuntu-latest
-    if: needs.check.outputs.version-updated == "true"
+    if: needs.check.outputs.version-updated == 'true'
 
     steps:
       - uses: actions/checkout@v2
