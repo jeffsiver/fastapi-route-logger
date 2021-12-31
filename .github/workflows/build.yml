@@ -50,6 +50,7 @@ jobs:
       - name: Publish distribution 📦 to Test PyPI
         if: startsWith(github.ref, 'refs/tags') != true
         uses: pypa/gh-action-pypi-publish@master
+        continue-on-error: true  # ignore errors for test PyPi
         with:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
