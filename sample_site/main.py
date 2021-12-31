@@ -2,7 +2,7 @@ import logging.config
 import os
 from time import sleep
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 
 from fastapi_route_logger_middleware import RouteLoggerMiddleware
 
