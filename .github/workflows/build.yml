@@ -1,6 +1,9 @@
 name: Build fastapi-route-logger
 
-on: ["push"]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   ci:
@@ -22,38 +25,12 @@ jobs:
         pipenv sync --dev
         pipenv run pytest
 
-  check:
+  build:
     needs: ci
     runs-on: ubuntu-latest
-    outputs:
-      version-updated: ${{ steps.changed-version-file.outputs.only_changed }}
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Get changed files
-        id: changed-version-file
-        uses: tj-actions/changed-files@v12.2
-        with:
-          files: |
-            .bumpversion.cfg
-
-  build:
-    needs: check
-    runs-on: ubuntu-latest
-    if: needs.check.outputs.version-updated == 'true'
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Get changed files
-        id: changed-version-file
-        uses: tj-actions/changed-files@v12.2
-        with:
-          files: |
-            .bumpversion.cfg
 
       - name: Setup Python 3.9
         uses: actions/setup-python@v1
