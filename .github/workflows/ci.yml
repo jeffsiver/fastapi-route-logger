@@ -46,7 +46,7 @@ jobs:
           pipenv run python setup.py bdist_wheel
 
       - name: Publish distribution 📦 to Test PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         continue-on-error: true
         with:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
