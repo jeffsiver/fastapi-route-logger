@@ -6,10 +6,10 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 pytest-mock = "*"
-black = "==19.10b0"
 hypercorn = "*"
 bump2version = "*"
 twine = "*"
+black = "*"
 
 [packages]
 fastapi = "*"

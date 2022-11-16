@@ -53,7 +53,11 @@ class TestRouteLogger:
             "fastapi_route_logger_middleware.time.perf_counter", side_effect=[1.2, 1.4]
         )
         request = MagicMock(
-            spec=Request, url=MagicMock(path="/somewhere",), method="GET",
+            spec=Request,
+            url=MagicMock(
+                path="/somewhere",
+            ),
+            method="GET",
         )
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
@@ -74,7 +78,11 @@ class TestRouteLogger:
             "fastapi_route_logger_middleware.time.perf_counter", side_effect=[1.2, 1.4]
         )
         request = MagicMock(
-            spec=Request, url=MagicMock(path="/somewhere",), method="GET",
+            spec=Request,
+            url=MagicMock(
+                path="/somewhere",
+            ),
+            method="GET",
         )
         app = MagicMock(spec=FastAPI)
         logger = MagicMock(spec=logging.Logger)
